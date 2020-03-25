@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Remove="README.md" />
       <None Remove="src\Storage\SourceData\words_alpha.txt" />
       <Content Include="src\Storage\SourceData\words_alpha.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
