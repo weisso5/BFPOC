@@ -23,5 +23,3 @@ jobs:
       run: dotnet build --configuration Debug --no-restore
     - name: Package
       run: dotnet pack --configuration Debug
-    - name: Push Package
-      run: dotnet nuget push "bin/Release/BFPOC.1.0.0.nupkg" --source "github"
