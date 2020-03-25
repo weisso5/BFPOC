@@ -8,6 +8,10 @@ using NUnit.Framework;
 
 namespace BFPoc.Tests
 {
+ 
+    /// <summary>
+    /// TODO - These tests should be derived from a calculated FP acceptance rate
+    /// </summary>
     public class SimpleBloomFilterAccuracyTests
     {
         

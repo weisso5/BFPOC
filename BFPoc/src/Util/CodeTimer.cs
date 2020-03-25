@@ -28,7 +28,7 @@ namespace BFPoc.Util
         public override string ToString()
         {
             return
-                $"[{Caller}] Start: {_start}, Stop: {_stop}, OverallTime: {(double) _stopwatch.ElapsedMilliseconds / 1000:#.000}";
+                $"[{Caller}] Start: {_start}, Stop: {_stop}, OverallTime: {(double) _stopwatch.ElapsedMilliseconds / 1000:#.000}s";
         }
 
         public DateTime StartTime => _start;

@@ -43,6 +43,7 @@ namespace BFPoc.Storage
                 _rootLogger.Debug($"Inserting hashvalue: {computeHash} for {value}");
                 _bitArray[computeHash] = true;
             }
+            timer.Stop();
             _rootLogger.Debug($"Insert of {values.Length} took {timer}");
         }
 
@@ -52,8 +53,9 @@ namespace BFPoc.Storage
             using var timer = new CodeTimer();
             var hashes = ComputeHashes(value);
             var results = hashes.Select(hash => SafeAccess(hash));
-            
-            _rootLogger.Debug($"Query for {value} took {timer}");
+
+            timer.Stop();
+            _rootLogger.Debug($"Query for {value} took {timer}"); //TODO - Expose Timing Metrics to Result
             return results.Aggregate(true, (b, b1) => b && b1);
         }
 
@@ -72,7 +74,7 @@ namespace BFPoc.Storage
             }
         }
 
-        private IEnumerable<int> ComputeHashes(string value)
+        public IEnumerable<int> ComputeHashes(string value)
         {
             return _hashFunctions.Select(hf => Math.Abs(hf.Hash(value)) % _size).ToArray();
         }

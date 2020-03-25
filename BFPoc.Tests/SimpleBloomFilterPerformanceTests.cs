@@ -7,6 +7,7 @@ using System.Text;
 using BFPoc.Storage;
 using BFPoc.Storage.Hashing;
 using BFPoc.Util;
+using log4net;
 using NUnit.Framework;
 
 namespace BFPoc.Tests
@@ -46,6 +47,7 @@ namespace BFPoc.Tests
                 queryMem.Add(GetMemoryUsedPercentage());
                 Assert.AreEqual(true,query);    
             }
+            timer.Stop();
             Console.WriteLine($"Total Query Time: {timer}");
 
             var endMemory = GetMemoryUsedPercentage();
@@ -73,6 +75,7 @@ namespace BFPoc.Tests
                 queryMem.Add(GetMemoryUsedPercentage());
                 Assert.AreEqual(true,query);    
             }
+            timer.Stop();
             Console.WriteLine($"Total Query Time: {timer}");
 
             var endMemory = GetMemoryUsedPercentage();
@@ -100,6 +103,7 @@ namespace BFPoc.Tests
                 queryMem.Add(GetMemoryUsedPercentage());
                 Assert.AreEqual(true,query);    
             }
+            timer.Stop();
             Console.WriteLine($"Total Query Time: {timer}");
 
             var endMemory = GetMemoryUsedPercentage();
@@ -114,19 +118,28 @@ namespace BFPoc.Tests
             return new SimpleBloomFilter(size, hashers, logger);
         }
 
+
+
+        private string[] _wordCache;
+
         /// <summary>
         /// 4000 Sample Words
         /// </summary>
         /// <returns></returns>
         private string[] GetTestData()
         {
+            if (_wordCache != null)
+                return _wordCache;
+
             var path = Path.Combine(AppContext.BaseDirectory, "performance_test_data.txt");
-            return File.ReadAllLines(path, Encoding.UTF8);
+            _wordCache =  File.ReadAllLines(path, Encoding.UTF8);
+            return _wordCache;
         }
 
         /// <summary>
         /// Simple Memory Percentage using FreePhysicalMemory and TotalVisibleMemorySize
         /// TODO - this should be more complex (smarter) to know about heap and underlying storage mechanism of the filter impl
+        /// TODO - not filtering out other processes
         /// </summary>
         /// <returns>double</returns>
         private double GetMemoryUsedPercentage()
