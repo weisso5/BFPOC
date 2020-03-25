@@ -69,7 +69,7 @@ namespace BFPoc
         {
             //TODO - this isn't the best for console apps as it runs every single time
             //TODO - Dataset should come from a more dynamic source, sample set for POC
-            var textFile = Path.Combine(AppContext.BaseDirectory, "src", "SourceData", "words_alpha.txt");
+            var textFile = Path.Combine(AppContext.BaseDirectory, "src","Storage", "SourceData", "words_alpha.txt");
             var textReader = new TextFileSourceDataReader(textFile, RootLogger);
             var preloadedData = textReader.ReadData().ToArray();
             return preloadedData;

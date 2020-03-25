@@ -21,15 +21,16 @@ namespace BFPoc.Models
 
         public override string ToString()
         {
-            return $"{nameof(Status)}: {Status}, {nameof(Matches)}: {GetString(Matches)}";
+            return $"{nameof(Status)}: {Status}, {nameof(Matches)}: {GetString(Matches, Status)}";
         }
 
-        private string GetString(ICollection<string> matches)
+        private string GetString(ICollection<string> matches, ResultStatus status)
         {
             var sb = new StringBuilder();
             foreach (var match in matches)
             {
-                sb.Append($"Did you mean: {match}?").Append(Environment.NewLine);
+                sb.Append(status == ResultStatus.FoundCloseMatch ? $"Did you mean: {match}?" : match);
+                sb.Append(Environment.NewLine);
             }
 
             return sb.ToString();
