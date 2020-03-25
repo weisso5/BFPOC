@@ -19,9 +19,7 @@ jobs:
         dotnet-version: 3.1.101
     - name: Install dependencies
       run: dotnet restore
-      working-directory: ./BFPOC
     - name: Build
-      working-directory: ./BFPOC
       run: dotnet build --configuration Debug --no-restore
     - name: Test
       run: dotnet test --no-restore --verbosity normal
