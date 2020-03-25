@@ -24,8 +24,8 @@ namespace BFPoc.Tests
         [Test]
         public void PrimeOddHasherAccuracyTest()
         {
-            var filter = new SimpleBloomFilter(GetSample().Count,new IHasher[] { new PrimeOddHasher(11,9)  }, null);
-            
+            var filter = CreateFilter(GetSample().Count, new[] {new PrimeOddHasher(11, 9)});
+
             foreach (var s in GetSample()) filter.Insert(s);
 
             var total = GetSample().Count;
@@ -52,8 +52,8 @@ namespace BFPoc.Tests
         [Test]
         public void DJB2HasherAccuracyTest()
         {
-            var filter = new SimpleBloomFilter(GetSample().Count,new IHasher[] { new DJB2Hasher()  }, null);
-            
+            var filter = CreateFilter(GetSample().Count, new[] { new DJB2Hasher() });
+
             foreach (var s in GetSample()) filter.Insert(s);
 
             var total = GetSample().Count;
@@ -80,8 +80,8 @@ namespace BFPoc.Tests
         [Test]
         public void SDBMHasherAccuracyTest()
         {
-            var filter = new SimpleBloomFilter(GetSample().Count,new IHasher[] { new SDBMHasher()  }, null);
-            
+            var filter = CreateFilter(GetSample().Count, new[] { new SDBMHasher() });
+
             foreach (var s in GetSample()) filter.Insert(s);
 
             var total = GetSample().Count;
