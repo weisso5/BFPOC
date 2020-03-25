@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using BFPoc.Storage;
 using BFPoc.Storage.Hashing;
+using log4net;
 using NUnit.Framework;
 
 namespace BFPoc.Tests
@@ -118,6 +120,12 @@ namespace BFPoc.Tests
                 "few", "case", "week", "company", "system", "each", "right", "program", "hear", "question", "during",
                 "play", "government", "run", "small"
             };
+        }
+        
+        private SimpleBloomFilter CreateFilter(int size, ICollection<IHasher> hashers)
+        {
+            var logger = LogManager.GetLogger(typeof(SimpleBloomFilterAccuracyTests));
+            return new SimpleBloomFilter(size, hashers, logger);
         }
     }
 }

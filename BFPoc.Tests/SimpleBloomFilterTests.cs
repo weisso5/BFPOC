@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using BFPoc.Storage;
 using BFPoc.Storage.Hashing;
+using log4net;
 using NUnit.Framework;
 
 namespace BFPoc.Tests
@@ -89,7 +90,8 @@ namespace BFPoc.Tests
 
         private SimpleBloomFilter CreateFilter(int size, ICollection<IHasher> hashers)
         {
-            return new SimpleBloomFilter(size, hashers, null);
+            var logger = LogManager.GetLogger(typeof(SimpleBloomFilterTests));
+            return new SimpleBloomFilter(size, hashers, logger);
         }
         
     }

@@ -11,7 +11,8 @@ using NUnit.Framework;
 
 namespace BFPoc.Tests
 {
-    
+
+#if Windows
     public class SimpleBloomFilterPerformanceTests
     {
         private ManagementObjectSearcher _wmiObject;
@@ -52,10 +53,65 @@ namespace BFPoc.Tests
             var memUsed = new[] {initialMemory, loadedMemory}.Union(queryMem);
             Console.WriteLine($"Avg Memory Usage: {memUsed.Average()}, Starting Value: {initialMemory}, After Insert: {loadedMemory}, After Query: {endMemory}, Query Average: {queryMem.Average()}");
         }
+
+        [Test]
+        public void SingleHasherSDBMPerformanceAnalyzer()
+        {
+            var initialMemory = GetMemoryUsedPercentage();
+            var data = GetTestData();
+            var filter = CreateFilter(data.Length, new IHasher[] {new SDBMHasher()});
+            foreach (var s in data) filter.Insert(s);
+            var loadedMemory = GetMemoryUsedPercentage();
+
+            var queryMem = new List<double>();
+            using var timer = new CodeTimer();
+            
+            
+            foreach (var test in data)
+            {
+                var query = filter.Query(test);
+                queryMem.Add(GetMemoryUsedPercentage());
+                Assert.AreEqual(true,query);    
+            }
+            Console.WriteLine($"Total Query Time: {timer}");
+
+            var endMemory = GetMemoryUsedPercentage();
+
+            var memUsed = new[] {initialMemory, loadedMemory}.Union(queryMem);
+            Console.WriteLine($"Avg Memory Usage: {memUsed.Average()}, Starting Value: {initialMemory}, After Insert: {loadedMemory}, After Query: {endMemory}, Query Average: {queryMem.Average()}");
+        }
+
+        [Test]
+        public void DoubleHasherPerformanceAnalyzer()
+        {
+            var initialMemory = GetMemoryUsedPercentage();
+            var data = GetTestData();
+            var filter = CreateFilter(data.Length, new IHasher[] {new DJB2Hasher(),new SDBMHasher()});
+            foreach (var s in data) filter.Insert(s);
+            var loadedMemory = GetMemoryUsedPercentage();
+
+            var queryMem = new List<double>();
+            using var timer = new CodeTimer();
+            
+            
+            foreach (var test in data)
+            {
+                var query = filter.Query(test);
+                queryMem.Add(GetMemoryUsedPercentage());
+                Assert.AreEqual(true,query);    
+            }
+            Console.WriteLine($"Total Query Time: {timer}");
+
+            var endMemory = GetMemoryUsedPercentage();
+
+            var memUsed = new[] {initialMemory, loadedMemory}.Union(queryMem);
+            Console.WriteLine($"Avg Memory Usage: {memUsed.Average()}, Starting Value: {initialMemory}, After Insert: {loadedMemory}, After Query: {endMemory}, Query Average: {queryMem.Average()}");
+        }
         
         private IBloomFilter CreateFilter(int size, ICollection<IHasher> hashers)
         {
-            return new SimpleBloomFilter(size, hashers, null);
+            var logger = LogManager.GetLogger(typeof(SimpleBloomFilterPerformanceTests));
+            return new SimpleBloomFilter(size, hashers, logger);
         }
 
         /// <summary>
@@ -83,4 +139,5 @@ namespace BFPoc.Tests
             return ((memoryValues.TotalVisibleMemorySize - memoryValues.FreePhysicalMemory) / memoryValues.TotalVisibleMemorySize) * 100;
         }
     }
+#endif
 }
